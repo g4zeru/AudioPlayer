@@ -7,9 +7,10 @@ target 'AudioPlayer' do
   project 'AudioPlayer.xcodeproj' 
 
   # Pods for AudioPlayer
-  pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'Action'
+  pod 'SnapKit', '~> 5.0.0'
+  pod 'RxSwift', '~> 5.0.0'
+  pod 'RxCocoa', '~> 5.0.0'
+  pod 'Action', '~> 4.0.0'
 
   target 'AudioPlayerTests' do
     inherit! :search_paths

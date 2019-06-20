@@ -12,7 +12,7 @@ import MediaPlayer
 
 class MusicPlayViewController: UIViewController {
     
-    @IBOutlet weak var tableView: UITableView!
+    var tableView: UITableView = UITableView()
     
     let headerHeight: CGFloat = 50
     let artworkCellHeight: CGFloat = 500
@@ -26,6 +26,18 @@ class MusicPlayViewController: UIViewController {
     deinit {
         DebugUtil.log("MusicPlayer is deinit")
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func loadView() {
+        super.loadView()
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (maker) in
+            let safeAreaConstrints = self.view.safeAreaLayoutGuide.snp
+            maker.top.equalTo(safeAreaConstrints.top)
+            maker.leading.equalTo(safeAreaConstrints.leading)
+            maker.bottom.equalTo(safeAreaConstrints.bottom)
+            maker.trailing.equalTo(safeAreaConstrints.trailing)
+        }
     }
     
     override func viewDidLoad() {
