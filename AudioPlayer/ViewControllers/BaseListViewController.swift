@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import SnapKit
 
 class BaseListViewController: UIViewController {
     
@@ -43,13 +44,14 @@ class BaseListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         self.view.addSubview(tableView)
-        self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
-        self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
+        self.tableView.snp.makeConstraints { (maker) in
+            let safeAreaConstraints = self.view.safeAreaLayoutGuide.snp
+            maker.top.equalTo(safeAreaConstraints.top)
+            maker.leading.equalTo(safeAreaConstraints.leading)
+            maker.trailing.equalTo(safeAreaConstraints.trailing)
+            maker.bottom.equalTo(safeAreaConstraints.bottom).inset(60)
+        }
         self.tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
     override func viewDidAppear(_ animated: Bool) {
