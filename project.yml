@@ -16,13 +16,13 @@ targets:
       SWIFT_VERSION: 5.0
       DEVELOPMENT_TEAM: "8446Z6F5D6"
     configFiles:
-      Debug: configs/AudioPlayer-Debug.xcconfig
-      Release: configs/AudioPlayer-Release.xcconfig
+      Debug: Pods/Target Support Files/Pods-AudioPlayer/Pods-AudioPlayer.debug.xcconfig
+      Release: Pods/Target Support Files/Pods-AudioPlayer/Pods-AudioPlayer.release.xcconfig
   AudioPlayerTests:
     platform: iOS
     type: bundle.unit-test
     configFiles:
-      Debug: configs/AudioPlayerTests-Debug.xcconfig
+      Debug: Pods/Target Support Files/Pods-AudioPlayerTests/Pods-AudioPlayerTests.debug.xcconfig
     sources:
       - AudioPlayerTests/
     dependencies:
