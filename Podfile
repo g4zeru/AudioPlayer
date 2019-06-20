@@ -7,7 +7,6 @@ target 'AudioPlayer' do
   project 'AudioPlayer.xcodeproj' 
 
   # Pods for AudioPlayer
-  pod 'IGListKit', '~> 3.0'
 
   target 'AudioPlayerTests' do
     inherit! :search_paths
