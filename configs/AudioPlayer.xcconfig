@@ -1,0 +1,7 @@
+// Generated using xcconfig-extractor 0.5.0 by Toshihiro Suzuki - https://github.com/toshi0383/xcconfig-extractor
+DEVELOPMENT_TEAM = 8446Z6F5D6
+PRODUCT_BUNDLE_IDENTIFIER = com.teranyan
+ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon
+INFOPLIST_FILE = AudioPlayer/Info.plist
+LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/Frameworks
+
