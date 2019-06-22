@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import MediaPlayer
+import RxSwift
+import RxCocoa
 
 class GenreListViewController: BaseListViewController {
     let cellHeight: CGFloat = 50
@@ -23,23 +25,20 @@ class GenreListViewController: BaseListViewController {
     }
     
     func bind() {
-        rx.sentMessage(#selector(viewWillAppear(_:)))
-            .asObservable()
-            .map {_ in
+        Observable.of(
+            rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+            willEnterForeground.asObservable().map {_ in},
+            mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
                 return MPMediaLibrary.authorizationStatus()
-            }.filter({ (status) -> Bool in
+            }.filter ({ (status) -> Bool in
                 return status == MPMediaLibraryAuthorizationStatus.authorized
             })
             .subscribe { [weak self] _ in
                 self?.queryFetch(case: .genres)
-            }
-            .disposed(by: self.disposeBag)
-        
-        self.mediaListAuth.subscribe(onNext: { [weak self] (status) in
-            if status == MPMediaLibraryAuthorizationStatus.authorized {
-                self?.queryFetch(case: .genres)
-            }
-        }).disposed(by: disposeBag)
+            }.disposed(by: disposeBag)
     }
 }
 extension GenreListViewController: UITableViewDelegate {

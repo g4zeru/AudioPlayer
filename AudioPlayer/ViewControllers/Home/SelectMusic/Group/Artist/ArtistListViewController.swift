@@ -8,6 +8,8 @@
 
 import UIKit
 import MediaPlayer
+import RxCocoa
+import RxSwift
 
 class ArtistListViewController: BaseListViewController {
     
@@ -27,23 +29,20 @@ class ArtistListViewController: BaseListViewController {
     }
     
     func bind() {
-        rx.sentMessage(#selector(viewWillAppear(_:)))
-            .asObservable()
-            .map {_ in
+        Observable.of(
+            rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+            willEnterForeground.asObservable().map {_ in},
+            mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
                 return MPMediaLibrary.authorizationStatus()
-            }.filter({ (status) -> Bool in
+            }.filter ({ (status) -> Bool in
                 return status == MPMediaLibraryAuthorizationStatus.authorized
             })
             .subscribe { [weak self] _ in
                 self?.queryFetch(case: .artist)
-            }
-            .disposed(by: self.disposeBag)
-        
-        self.mediaListAuth.filter({ (status) -> Bool in
-            return status == MPMediaLibraryAuthorizationStatus.authorized
-        }).subscribe(onNext: { [weak self] (status) in
-            self?.queryFetch(case: .artist)
-        }).disposed(by: disposeBag)
+            }.disposed(by: disposeBag)
     }
 }
 extension ArtistListViewController: UITableViewDelegate {

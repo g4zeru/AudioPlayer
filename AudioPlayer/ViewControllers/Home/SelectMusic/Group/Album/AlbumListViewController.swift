@@ -29,24 +29,21 @@ class AlbumListViewController: BaseListViewController {
     }
     
     func bind() {
-        rx.sentMessage(#selector(viewWillAppear(_:))).asObservable().subscribe({_ in print("hoge")}).disposed(by: disposeBag)
-        rx.sentMessage(#selector(viewWillAppear(_:)))
-            .asObservable()
-            .map {_ in
+        Observable.of(
+                rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+                willEnterForeground.asObservable().map {_ in},
+                mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
                 return MPMediaLibrary.authorizationStatus()
-            }.filter({ (status) -> Bool in
+            }.filter ({ (status) -> Bool in
                 return status == MPMediaLibraryAuthorizationStatus.authorized
             })
             .subscribe { [weak self] _ in
+                print("request")
                 self?.queryFetch(case: .album)
-            }
-            .disposed(by: self.disposeBag)
-        
-        self.mediaListAuth.subscribe(onNext: { [weak self] (status) in
-            if status == MPMediaLibraryAuthorizationStatus.authorized {
-                self?.queryFetch(case: .album)
-            }
-        }).disposed(by: disposeBag)
+        }.disposed(by: disposeBag)
     }
 }
 extension AlbumListViewController: UITableViewDelegate {

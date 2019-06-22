@@ -34,9 +34,19 @@ class BaseListViewController: UIViewController {
     let queue: MediaPlayerOutputQueueProtocol = AudioPlayer.shared
     
     private let mediaListAuthStatusSubject = PublishSubject<MPMediaLibraryAuthorizationStatus>()
+    private let willEnterForegroundSubject = PublishSubject<NSNotification>()
+    private let didEnterBackgroundSubject = PublishSubject<NSNotification>()
+    
     var mediaListAuth: Observable<MPMediaLibraryAuthorizationStatus> {
-        return mediaListAuthStatusSubject.asObserver()
+        return mediaListAuthStatusSubject.asObservable()
     }
+    var willEnterForeground: Observable<NSNotification> {
+        return willEnterForegroundSubject.asObservable()
+    }
+    var didEnterBackground: Observable<NSNotification> {
+        return didEnterBackgroundSubject.asObservable()
+    }
+    
     let disposeBag = DisposeBag()
     
     private(set) lazy var tableView: UITableView = {
@@ -63,6 +73,8 @@ class BaseListViewController: UIViewController {
         MPMediaLibrary.requestAuthorization { [weak self] (status) in
             self?.mediaListAuthStatusSubject.onNext(status)
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -74,6 +86,13 @@ class BaseListViewController: UIViewController {
     func queryFetch(case queryCase: MediaItemsUseCase.QueryCase ) {
         //デフォでアップルミュージックの接続を制限
         self.fetcher.fetch(cases: queryCase, with: self.queryFilter, isAppleMusic: false)
+    }
+    
+    @objc func willEnterForeground(_ notification: NSNotification) {
+        self.willEnterForegroundSubject.onNext(notification)
+    }
+    @objc func didEnterBackground(_ notification: NSNotification) {
+        self.didEnterBackgroundSubject.onNext(notification)
     }
 }
 extension BaseListViewController: MediaItemsFetchResult {
