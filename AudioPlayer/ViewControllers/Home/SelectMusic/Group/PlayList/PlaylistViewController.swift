@@ -33,12 +33,18 @@ class PlaylistViewCotroller: BaseListViewController {
             .merge()
             .map { _ in
                 return MPMediaLibrary.authorizationStatus()
-            }.filter ({ (status) -> Bool in
-                return status == MPMediaLibraryAuthorizationStatus.authorized
-            })
-            .subscribe { [weak self] _ in
-                self?.queryFetch(case: .playlists)
-            }.disposed(by: disposeBag)
+            }
+            .subscribe { [weak self] status in
+                guard let status = status.element else {
+                    return
+                }
+                if status == MPMediaLibraryAuthorizationStatus.authorized {
+                    self?.queryFetch(case: .album)
+                    self?.accessView.removeFromSuperview()
+                } else {
+                    self?.showRequestView()
+                }
+        }.disposed(by: disposeBag)
     }
 }
 extension PlaylistViewCotroller: UITableViewDelegate {

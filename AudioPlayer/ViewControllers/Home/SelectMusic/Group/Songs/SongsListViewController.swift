@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import MediaPlayer
+import RxCocoa
+import RxSwift
 
 class SongsListViewController: BaseListViewController {
     let cellHeight: CGFloat = 60
@@ -19,14 +21,36 @@ class SongsListViewController: BaseListViewController {
         self.tableView.register(UINib(nibName: "ItemSectionHeader", bundle: nil), forHeaderFooterViewReuseIdentifier: "header")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.queryFetch(case: .songs)
-        //self.fetcher.fetch(fetchGroup: .title, isAppleMusic: false)
+        self.bind()
     }
     private func itemIndex(path: IndexPath) -> Int? {
         guard let location = self.query?.itemSections?[path.section].range.location else {
             return nil
         }
         return location + path.item
+    }
+    
+    func bind() {
+        Observable.of(
+            rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+            willEnterForeground.asObservable().map {_ in},
+            mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
+                return MPMediaLibrary.authorizationStatus()
+            }
+            .subscribe { [weak self] status in
+                guard let status = status.element else {
+                    return
+                }
+                if status == MPMediaLibraryAuthorizationStatus.authorized {
+                    self?.queryFetch(case: .songs)
+                    self?.accessView.removeFromSuperview()
+                } else {
+                    self?.showRequestView()
+                }
+            }.disposed(by: disposeBag)
     }
 }
 extension SongsListViewController: UITableViewDelegate {

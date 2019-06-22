@@ -11,7 +11,7 @@ import UIKit
 import MediaPlayer
 
 class HomeViewController: BaseListViewController {
-    var collection: [String] = ["Albums","Artist","Songs","PlayList","Genre","Picker"]
+    var collection: [String] = ["Albums","Artist","Songs","PlayList","Genre"]
     let cellHeight: CGFloat = 50
     let headerHeight: CGFloat = 70
     lazy var miniController: MiniAudioController = {
@@ -51,8 +51,6 @@ extension HomeViewController: UITableViewDelegate {
             self.navigationController?.show(PlaylistViewCotroller(), sender: nil)
         case 4:
             self.navigationController?.show(GenreListViewController(), sender: nil)
-        case 5:
-            self.navigationController?.show(MPMediaPickerController(), sender: nil)
         default:
             return
         }
