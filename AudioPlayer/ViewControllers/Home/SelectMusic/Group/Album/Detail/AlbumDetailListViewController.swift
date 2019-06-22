@@ -8,6 +8,8 @@
 
 import UIKit
 import MediaPlayer
+import RxCocoa
+import RxSwift
 
 class AlbumDetailListViewController: BaseListViewController {
 
@@ -26,10 +28,24 @@ class AlbumDetailListViewController: BaseListViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.queryFilter = [MPMediaPropertyPredicate(value: albumTitle, forProperty: MPMediaItemPropertyAlbumTitle, comparisonType: .equalTo)]
-        self.queryFetch(case: .album)
+        self.bind()
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    func bind() {
+        Observable.of(
+            rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+            willEnterForeground.asObservable().map {_ in},
+            mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
+                return MPMediaLibrary.authorizationStatus()
+            }.filter ({ (status) -> Bool in
+                return status == MPMediaLibraryAuthorizationStatus.authorized
+            })
+            .subscribe { [weak self] _ in
+                self?.queryFetch(case: .album)
+            }.disposed(by: disposeBag)
     }
 }
 extension AlbumDetailListViewController: UITableViewDataSource {

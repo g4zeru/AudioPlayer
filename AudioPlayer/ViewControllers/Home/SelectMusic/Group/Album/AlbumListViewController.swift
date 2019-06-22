@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import MediaPlayer
+import RxSwift
+import RxCocoa
 
 class AlbumListViewController: BaseListViewController {
     let cellHeight: CGFloat = 120
@@ -23,7 +25,25 @@ class AlbumListViewController: BaseListViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.tableView.tableFooterView = UIView()
-        self.queryFetch(case: .album)
+        bind()
+    }
+    
+    func bind() {
+        Observable.of(
+                rx.sentMessage(#selector(viewWillAppear(_:))).map {_ in},
+                willEnterForeground.asObservable().map {_ in},
+                mediaListAuth.asObservable().map {_ in}
+            )
+            .merge()
+            .map { _ in
+                return MPMediaLibrary.authorizationStatus()
+            }.filter ({ (status) -> Bool in
+                return status == MPMediaLibraryAuthorizationStatus.authorized
+            })
+            .subscribe { [weak self] _ in
+                print("request")
+                self?.queryFetch(case: .album)
+        }.disposed(by: disposeBag)
     }
 }
 extension AlbumListViewController: UITableViewDelegate {
