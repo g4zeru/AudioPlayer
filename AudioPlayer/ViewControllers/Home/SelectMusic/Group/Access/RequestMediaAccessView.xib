@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RequestMediaAccessView" customModule="AudioPlayer" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="402"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please Allow Access to Your Phone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XtB-E6-sNi">
+                    <rect key="frame" x="10" y="148.5" width="394" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="KrF-M9-916"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This allows AudioPlayer to access Audio from your library." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1E-UG-1pX">
+                    <rect key="frame" x="20" y="194" width="374" height="14.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gub-j6-D3o">
+                    <rect key="frame" x="134.5" y="226" width="145" height="30"/>
+                    <state key="normal" title="Enable Media Access"/>
+                    <connections>
+                        <action selector="access:" destination="iN0-l3-epB" eventType="touchUpInside" id="wZQ-bK-one"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="XtB-E6-sNi" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="1mZ-CA-Wi6"/>
+                <constraint firstItem="Gub-j6-D3o" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="32H-vE-7ui"/>
+                <constraint firstItem="k1E-UG-1pX" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="4D1-hq-T02"/>
+                <constraint firstItem="XtB-E6-sNi" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="0.8" id="7UW-ax-vTh"/>
+                <constraint firstItem="k1E-UG-1pX" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="8S4-yj-e08"/>
+                <constraint firstItem="k1E-UG-1pX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RvP-XC-rrx"/>
+                <constraint firstItem="XtB-E6-sNi" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="nkX-M8-Mqy"/>
+                <constraint firstItem="Gub-j6-D3o" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" multiplier="1.2" id="qjn-Ld-fhX"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="accessButton" destination="Gub-j6-D3o" id="pix-ST-LQc"/>
+            </connections>
+            <point key="canvasLocation" x="151" y="-10"/>
+        </view>
+    </objects>
+</document>
