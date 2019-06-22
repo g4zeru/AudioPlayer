@@ -37,6 +37,13 @@ class BaseListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
+    private(set) var accessView: UIView = {
+        let view = UINib(nibName: "RequestMediaAccessView", bundle: nil).instantiate(withOwner: self, options: nil).first as! RequestMediaAccessView
+        return view
+        
+    }()
+    
     override func loadView() {
         super.loadView()
         self.view = backgroundView
