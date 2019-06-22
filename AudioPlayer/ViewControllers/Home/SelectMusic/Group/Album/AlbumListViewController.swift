@@ -37,12 +37,17 @@ class AlbumListViewController: BaseListViewController {
             .merge()
             .map { _ in
                 return MPMediaLibrary.authorizationStatus()
-            }.filter ({ (status) -> Bool in
-                return status == MPMediaLibraryAuthorizationStatus.authorized
-            })
-            .subscribe { [weak self] _ in
-                print("request")
-                self?.queryFetch(case: .album)
+            }
+            .subscribe { [weak self] status in
+                guard let status = status.element else {
+                    return
+                }
+                if status == MPMediaLibraryAuthorizationStatus.authorized {
+                    self?.queryFetch(case: .album)
+                    self?.accessView.removeFromSuperview()
+                } else {
+                    self?.showRequestView()
+                }
         }.disposed(by: disposeBag)
     }
 }

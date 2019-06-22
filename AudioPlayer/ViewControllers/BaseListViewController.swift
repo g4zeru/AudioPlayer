@@ -55,7 +55,7 @@ class BaseListViewController: UIViewController {
         return tableView
     }()
     
-    private(set) var accessView: UIView = {
+    let accessView: UIView = {
         let view = UINib(nibName: "RequestMediaAccessView", bundle: nil).instantiate(withOwner: self, options: nil).first as! RequestMediaAccessView
         return view
         
@@ -88,6 +88,18 @@ class BaseListViewController: UIViewController {
         if let selectIndex = self.tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: selectIndex, animated: true)
         }
+    }
+    
+    func showRequestView() {
+        self.view.addSubview(accessView)
+        accessView.snp.makeConstraints({ (maker) in
+            let safeAreaConstraints = self.view.safeAreaLayoutGuide.snp
+            maker.top.equalTo(safeAreaConstraints.top)
+            maker.leading.equalTo(safeAreaConstraints.leading)
+            maker.bottom.equalTo(safeAreaConstraints.bottom)
+            maker.trailing.equalTo(safeAreaConstraints.trailing)
+        })
+        self.view.layoutIfNeeded()
     }
     
     func queryFetch(case queryCase: MediaItemsUseCase.QueryCase ) {
